@@ -1,10 +1,14 @@
 module.exports = function check(str, bracketsConfig) {
-  let result = true;
-  bracketsConfig.flat().join(', ');
-  for (let i = 0; i < str.length; i ++) {
-    if(!bracketsConfig.includes(str[i])) {
-      result = false;
+  const stack = [];
+  for (let i = 0; i < str.length; i++) {
+    const char = str[i];
+    if (bracketsConfig[char]) {
+      stack.push(char);
+    } else if (Object.values(bracketsConfig).includes(char)) {
+      if(stack.length === 0 || bracketsConfig[stack.pop()] !== char) {
+        return false;
+      }
     }
   }
-  return result;
+  return stack.length === 0;
 }
