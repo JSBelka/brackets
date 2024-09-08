@@ -2,10 +2,14 @@ module.exports = function check(str, bracketsConfig) {
   const stack = [];
   for (let i = 0; i < str.length; i++) {
     const char = str[i];
-    if (bracketsConfig[char]) {
+    const openingBracket = bracketsConfig.find(x => x[0] === char);
+    if (openingBracket) {
       stack.push(char);
-    } else if (Object.values(bracketsConfig).includes(char)) {
-      if(stack.length === 0 || bracketsConfig[stack.pop()] !== char) {
+    } else {
+      const closingBracket = bracketsConfig.find(x => x[1] === char);
+      if (closingBracket && stack.pop() !== closingBracket[0]) {
+        return false;
+      } else if (!closingBracket) {
         return false;
       }
     }
