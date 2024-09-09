@@ -1,18 +1,9 @@
 module.exports = function check(str, bracketsConfig) {
-  const stack = [];
-  for (let i = 0; i < str.length; i++) {
-    const char = str[i];
-    const openingBracket = bracketsConfig.find(x => x[0] === char);
-    if (openingBracket) {
-      stack.push(char);
-    } else {
-      const closingBracket = bracketsConfig.find(x => x[1] === char);
-      if (closingBracket && stack.pop() !== closingBracket[0]) {
-        return false;
-      } else if (!closingBracket) {
-        return false;
-      }
-    }
-  }
-  return stack.length === 0;
+  const result = str.split('').reduce((acc, cur) => {
+    Object.fromEntries(bracketsConfig[acc.at(-1)] === cur ? acc.pop() : acc.push(cur));
+    return acc}, []);
+  return result.length === 0;
 }
+
+
+
